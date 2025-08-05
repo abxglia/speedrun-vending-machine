@@ -16,6 +16,7 @@ use alloy_primitives::{Address, Uint};
 use stylus_sdk::alloy_primitives::U256;
 use stylus_sdk::prelude::*;
 use stylus_sdk::{block, console};
+use stylus_cache_sdk::{is_contract_cacheable};
 
 // Define persistent storage using the Solidity ABI.
 // `VendingMachine` will be the entrypoint for the contract.
@@ -32,8 +33,12 @@ sol_storage! {
 // Declare that `VendingMachine` is a contract with the following external methods.
 #[public]
 impl VendingMachine {
+    pub fn is_cacheable(&self) -> bool {
+        is_contract_cacheable()
+    }
+
     // Give a cupcake to the specified user if they are eligible (i.e., if at least 5 seconds have passed since their last cupcake).
-    pub fn give_cupcake_to(&mut self, user_address: Address) -> bool {
+    pub fn give_cupcake_to_abxglia(&mut self, user_address: Address) -> bool {
         // Get the last distribution time for the user.
         let last_distribution = self.cupcake_distribution_times.get(user_address);
         // Calculate the earliest next time the user can receive a cupcake.
